@@ -11,6 +11,24 @@ const merchantKeySecret = process.env.MERCHANT_KEY_SECRET;
 const gatewayWebhookSecret = process.env.GATEWAY_WEBHOOK_SECRET;
 const gatewayConfigured = Boolean(merchantKeyId && merchantKeySecret);
 
+function getAppBaseUrl(req = null) {
+  if (process.env.PUBLIC_APP_URL) {
+    return process.env.PUBLIC_APP_URL.replace(/\/+$/, "");
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`.replace(/\/+$/, "");
+  }
+
+  if (req) {
+    const proto = req.headers["x-forwarded-proto"] || req.protocol || "http";
+    const host = req.headers["x-forwarded-host"] || req.get("host") || `localhost:${port}`;
+    return `${proto}://${host}`.replace(/\/+$/, "");
+  }
+
+  return `http://localhost:${port}`;
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/webhook", express.raw({ type: "*/*" }));
@@ -75,6 +93,10 @@ app.post("/api/create-order", async (req, res) => {
       cartItems.push({ product_id: product.id, quantity });
     }
 
+    const appBaseUrl = getAppBaseUrl(req);
+    const callbackUrl = `${appBaseUrl}/api/webhook`;
+    const redirectUrl = `${appBaseUrl}/?payment=success`;
+
     const gatewayResponse = await fetch(`${gatewayApiUrl}/v1/orders`, {
       method: "POST",
       headers: {
@@ -86,8 +108,8 @@ app.post("/api/create-order", async (req, res) => {
         currency: "INR",
         receipt: `rcpt_${Date.now()}`,
         notes: {
-          callback_url: "http://localhost:3001",
-          redirect_url: "http://localhost:3001",
+          callback_url: callbackUrl,
+          redirect_url: redirectUrl,
           cart_items_count: cartItems.length,
         },
       }),
