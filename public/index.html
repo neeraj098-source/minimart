@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiniMart Store</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">MiniMart</div>
+      <button class="cart-button" id="cartButton">Cart <span id="cartCount">0</span></button>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Fresh picks for everyday life</p>
+          <h1>Simple shopping, secure checkout.</h1>
+          <p>
+            Add products to cart and test the Razorpay payment flow with a sandbox test key.
+          </p>
+        </div>
+      </section>
+
+      <section class="products-section">
+        <h2>Popular items</h2>
+        <div id="productGrid" class="product-grid"></div>
+      </section>
+
+      <aside class="cart-panel" id="cartPanel">
+        <h3>Your cart</h3>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="summary-row">
+          <span>Total</span>
+          <strong id="cartTotal">₹0</strong>
+        </div>
+
+        <div id="paymentStatus" class="payment-status hidden" aria-live="polite">
+          <div class="status-icon">✓</div>
+          <div>
+            <strong id="paymentStatusTitle">Payment confirmed</strong>
+            <p id="paymentStatusText">Your order is being processed.</p>
+          </div>
+        </div>
+
+        <form id="checkoutForm" class="checkout-form">
+          <h4>Checkout</h4>
+          <input type="text" id="customerName" placeholder="Full name" required />
+          <input type="email" id="customerEmail" placeholder="Email" required />
+          <input type="tel" id="customerPhone" placeholder="Phone" required />
+          <textarea id="customerAddress" placeholder="Shipping address" required></textarea>
+          <button type="submit" id="payButton">Proceed to pay</button>
+        </form>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Payment | MiniMart</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: rgba(255, 255, 255, 0.9);
+        --accent: #5b4df4;
+        --accent-dark: #3f2fe0;
+        --text: #171c2c;
+        --muted: #667085;
+        --line: #e7eaf2;
+        --success: #1c9d69;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Inter, Arial, sans-serif;
+        background: linear-gradient(135deg, #f5f1ff 0%, #eef4ff 100%);
+        color: var(--text);
+      }
+
+      .page {
+        width: min(520px, 90vw);
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 36px 28px;
+        box-shadow: 0 24px 40px rgba(21, 24, 42, 0.08);
+      }
+
+      .brand {
+        font-weight: 800;
+        font-size: 1.8rem;
+        letter-spacing: -0.05em;
+        margin-bottom: 12px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(91, 77, 244, 0.08);
+        color: var(--accent);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .badge::before {
+        content: "\2713";
+        width: 18px;
+        height: 18px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(91, 77, 244, 0.12);
+      }
+
+      h1 {
+        margin: 22px 0 12px;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        letter-spacing: -0.06em;
+        line-height: 1.06;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .loader-wrap {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .spinner {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 4px solid rgba(91, 77, 244, 0.12);
+        border-top-color: var(--accent);
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .status {
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .meta {
+        margin-top: 22px;
+        display: grid;
+        gap: 8px;
+        font-size: 0.95rem;
+      }
+
+      .meta strong {
+        color: var(--text);
+      }
+
+      .actions {
+        margin-top: 28px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        appearance: none;
+        border: none;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+        color: white;
+        font-weight: 700;
+        padding: 12px 18px;
+        border-radius: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 10px 20px rgba(91, 77, 244, 0.18);
+      }
+
+      .button.secondary {
+        background: #fff;
+        color: var(--text);
+        border: 1px solid var(--line);
+        box-shadow: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="brand">MiniMart</div>
+      <div class="badge">Secure Checkout</div>
+      <h1>Redirecting to payment</h1>
+      <p>Your order is ready. We are securely sending you to the payment portal to complete your purchase.</p>
+
+      <div class="loader-wrap">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="status">Preparing payment gateway...</div>
+      </div>
+
+      <div class="meta">
+        <div><strong>Payment method:</strong> Secure gateway checkout</div>
+        <div><strong>Protection:</strong> Encrypted and verified</div>
+      </div>
+
+      <div class="actions">
+        <a id="continueButton" class="button" href="#">Continue</a>
+        <a class="button secondary" href="/">Back to store</a>
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const checkoutUrl = params.get('checkout');
+
+      const continueButton = document.getElementById('continueButton');
+      if (checkoutUrl) {
+        continueButton.href = checkoutUrl;
+        setTimeout(() => {
+          window.location.replace(checkoutUrl);
+        }, 1600);
+      } else {
+        document.querySelector('.status').textContent = 'Payment link not found';
+        continueButton.style.display = 'none';
+      }
+    </script>
+  </body>
+</html>
